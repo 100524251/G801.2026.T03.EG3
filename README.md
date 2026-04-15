@@ -1,2 +1,5 @@
-# G8X.2026.TYY.EG3
-Repository for Guided Exercise 3
+# G801.2026.T03.EG3
+
+Luis Baón (100524834)
+Nicolás Juliá (100524251)
+
