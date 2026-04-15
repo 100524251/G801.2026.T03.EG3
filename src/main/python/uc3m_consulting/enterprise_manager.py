@@ -96,6 +96,14 @@ class EnterpriseManager:
             raise EnterpriseManagementException("Invalid description format")
         return project_description
 
+    def validate_department(self, department: str):
+        """validates the project department"""
+        department_pattern = re.compile(r"(HR|FINANCE|LEGAL|LOGISTICS)")
+        result = department_pattern.fullmatch(department)
+        if not result:
+            raise EnterpriseManagementException("Invalid department")
+        return department
+
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
                          company_cif: str,
@@ -111,10 +119,7 @@ class EnterpriseManager:
 
         self.validate_project_description(project_description)
 
-        mr = re.compile(r"(HR|FINANCE|LEGAL|LOGISTICS)")
-        res = mr.fullmatch(department)
-        if not res:
-            raise EnterpriseManagementException("Invalid department")
+        self.validate_department(department)
 
         self.validate_starting_date(date)
 
