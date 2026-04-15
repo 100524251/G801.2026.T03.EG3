@@ -21,31 +21,26 @@ class EnterpriseManager:
         """Validates a CIF number."""
         if not isinstance(company_cif, str):
             raise EnterpriseManagementException("CIF code must be a string")
-
         cif_pattern = re.compile(r"^[ABCDEFGHJKNPQRSUVW]\d{7}[0-9A-J]$")
         if not cif_pattern.fullmatch(company_cif):
             raise EnterpriseManagementException("Invalid CIF format")
 
         organization_type = company_cif[0]
-        digits = company_cif[1:8]
+        cif_digits = company_cif[1:8]
         control_character = company_cif[8]
 
         even_position_sum = 0
         odd_position_sum = 0
 
-        for index in range(len(digits)):
+        for index in range(len(cif_digits)):
             if index % 2 == 0:
-                doubled_value = int(digits[index]) * 2
+                doubled_value = int(cif_digits[index]) * 2
                 if doubled_value > 9:
-                    even_position_sum = even_position_sum + (
-                            doubled_value // 10
-                    ) + (
-                                                doubled_value % 10
-                                        )
+                    even_position_sum = even_position_sum + (doubled_value // 10) + (doubled_value % 10)
                 else:
                     even_position_sum = even_position_sum + doubled_value
             else:
-                odd_position_sum = odd_position_sum + int(digits[index])
+                odd_position_sum = odd_position_sum + int(cif_digits[index])
 
         total_sum = even_position_sum + odd_position_sum
         remainder = total_sum % 10
@@ -56,19 +51,14 @@ class EnterpriseManager:
 
         control_letters = "JABCDEFGHI"
 
-        if organization_type in ("A", "B", "E", "H"):
+        if organization_type in ('A', 'B', 'E', 'H'):
             if str(control_digit) != control_character:
-                raise EnterpriseManagementException(
-                    "Invalid CIF character control number"
-                )
-        elif organization_type in ("P", "Q", "S", "K"):
+                raise EnterpriseManagementException("Invalid CIF character control number")
+        elif organization_type in ('P', 'Q', 'S', 'K'):
             if control_letters[control_digit] != control_character:
-                raise EnterpriseManagementException(
-                    "Invalid CIF character control letter"
-                )
+                raise EnterpriseManagementException("Invalid CIF character control letter")
         else:
             raise EnterpriseManagementException("CIF type not supported")
-
         return True
 
     def validate_starting_date(self, t_d):
