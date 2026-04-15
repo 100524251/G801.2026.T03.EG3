@@ -88,6 +88,14 @@ class EnterpriseManager:
             raise EnterpriseManagementException("Invalid acronym")
         return project_acronym
 
+    def validate_project_description(self, project_description: str):
+        """validates the project description format"""
+        description_pattern = re.compile(r"^.{10,30}$")
+        result = description_pattern.fullmatch(project_description)
+        if not result:
+            raise EnterpriseManagementException("Invalid description format")
+        return project_description
+
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
                          company_cif: str,
@@ -101,10 +109,7 @@ class EnterpriseManager:
 
         self.validate_project_acronym(project_acronym)
 
-        md = re.compile(r"^.{10,30}$")
-        res = md.fullmatch(project_description)
-        if not res:
-            raise EnterpriseManagementException("Invalid description format")
+        self.validate_project_description(project_description)
 
         mr = re.compile(r"(HR|FINANCE|LEGAL|LOGISTICS)")
         res = mr.fullmatch(department)
