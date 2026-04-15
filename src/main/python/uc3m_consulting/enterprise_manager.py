@@ -79,6 +79,15 @@ class EnterpriseManager:
         if my_date.year < 2025 or my_date.year > 2050:
             raise EnterpriseManagementException("Invalid date format")
         return t_d
+
+    def validate_project_acronym(self, project_acronym: str):
+        """validates the project acronym format"""
+        acronym_pattern = re.compile(r"^[a-zA-Z0-9]{5,10}")
+        result = acronym_pattern.fullmatch(project_acronym)
+        if not result:
+            raise EnterpriseManagementException("Invalid acronym")
+        return project_acronym
+
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
                          company_cif: str,
@@ -89,10 +98,9 @@ class EnterpriseManager:
                          budget: str):
         """registers a new project"""
         self.validate_cif(company_cif)
-        mr = re.compile(r"^[a-zA-Z0-9]{5,10}")
-        res = mr.fullmatch(project_acronym)
-        if not res:
-            raise EnterpriseManagementException("Invalid acronym")
+
+        self.validate_project_acronym(project_acronym)
+
         md = re.compile(r"^.{10,30}$")
         res = md.fullmatch(project_description)
         if not res:
