@@ -182,6 +182,7 @@ class EnterpriseManager:
         t_l.append(new_project.to_json())
 
         self.write_projects_store(t_l)
+        return new_project.project_id
 
 
     def find_docs(self, date_str):
