@@ -174,14 +174,14 @@ class EnterpriseManager:
                                         starting_date=date,
                                         project_budget=budget)
 
-        t_l = self.read_projects_store()
-        for t_i in t_l:
-            if t_i == new_project.to_json():
+        projects_list = self.read_projects_store()
+        for stored_project in projects_list:
+            if stored_project == new_project.to_json():
                 raise EnterpriseManagementException("Duplicated project in projects list")
 
-        t_l.append(new_project.to_json())
+        projects_list.append(new_project.to_json())
 
-        self.write_projects_store(t_l)
+        self.write_projects_store(projects_list)
         return new_project.project_id
 
 
