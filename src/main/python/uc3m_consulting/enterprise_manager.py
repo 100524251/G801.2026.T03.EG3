@@ -61,17 +61,21 @@ class EnterpriseManager:
             raise EnterpriseManagementException("CIF type not supported")
         return True
 
-    def validate_starting_date(self, t_d):
-        """validates the  date format  using regex"""
-        mr = re.compile(r"^(([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d\d\d\d)$")
-        res = mr.fullmatch(t_d)
-        if not res:
+    def validate_date_format(self, date_text: str):
+        """validates the date format and returns the parsed date"""
+        date_pattern = re.compile(r"^(([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d\d\d\d)$")
+        result = date_pattern.fullmatch(date_text)
+        if not result:
             raise EnterpriseManagementException("Invalid date format")
 
         try:
-            my_date = datetime.strptime(t_d, "%d/%m/%Y").date()
+            return datetime.strptime(date_text, "%d/%m/%Y").date()
         except ValueError as ex:
             raise EnterpriseManagementException("Invalid date format") from ex
+
+    def validate_starting_date(self, t_d):
+        """validates the  date format  using regex"""
+        my_date = self.validate_date_format(t_d)
 
         if my_date < datetime.now(timezone.utc).date():
             raise EnterpriseManagementException("Project's date must be today or later.")
@@ -191,16 +195,7 @@ class EnterpriseManager:
             EnterpriseManagementException: On invalid date, file IO errors,
                 missing data, or cryptographic integrity failure.
         """
-        mr = re.compile(r"^(([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d\d\d\d)$")
-        res = mr.fullmatch(date_str)
-        if not res:
-            raise EnterpriseManagementException("Invalid date format")
-
-        try:
-            my_date = datetime.strptime(date_str, "%d/%m/%Y").date()
-        except ValueError as ex:
-            raise EnterpriseManagementException("Invalid date format") from ex
-
+        self.validate_date_format(date_str)
 
         # open documents
         try:
