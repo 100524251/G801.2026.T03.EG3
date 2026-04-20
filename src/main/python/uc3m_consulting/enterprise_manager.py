@@ -126,6 +126,16 @@ class EnterpriseManager:
 
         return budget
 
+    def read_projects_store(self):
+        """reads the projects store file"""
+        try:
+            with open(PROJECTS_STORE_FILE, "r", encoding="utf-8", newline="") as file:
+                return json.load(file)
+        except FileNotFoundError:
+            return []
+        except json.JSONDecodeError as ex:
+            raise EnterpriseManagementException("JSON Decode Error - Wrong JSON Format") from ex
+
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
                          company_cif: str,
@@ -154,14 +164,7 @@ class EnterpriseManager:
                                         starting_date=date,
                                         project_budget=budget)
 
-        try:
-            with open(PROJECTS_STORE_FILE, "r", encoding="utf-8", newline="") as file:
-                t_l = json.load(file)
-        except FileNotFoundError:
-            t_l = []
-        except json.JSONDecodeError as ex:
-            raise EnterpriseManagementException("JSON Decode Error - Wrong JSON Format") from ex
-
+        t_l = self.read_projects_store()
         for t_i in t_l:
             if t_i == new_project.to_json():
                 raise EnterpriseManagementException("Duplicated project in projects list")
