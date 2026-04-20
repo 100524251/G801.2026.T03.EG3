@@ -104,6 +104,24 @@ class EnterpriseManager:
             raise EnterpriseManagementException("Invalid department")
         return department
 
+    def validate_project_budget(self, budget):
+        """validates the project budget"""
+        try:
+            float_budget = float(budget)
+        except ValueError as exc:
+            raise EnterpriseManagementException("Invalid budget amount") from exc
+
+        budget_as_string = str(float_budget)
+        if '.' in budget_as_string:
+            decimal_digits = len(budget_as_string.split('.')[1])
+            if decimal_digits > 2:
+                raise EnterpriseManagementException("Invalid budget amount")
+
+        if float_budget < 50000 or float_budget > 1000000:
+            raise EnterpriseManagementException("Invalid budget amount")
+
+        return budget
+
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
                          company_cif: str,
@@ -123,20 +141,7 @@ class EnterpriseManager:
 
         self.validate_starting_date(date)
 
-        try:
-            f_bdgt  = float(budget)
-        except ValueError as exc:
-            raise EnterpriseManagementException("Invalid budget amount") from exc
-
-        n_str = str(f_bdgt)
-        if '.' in n_str:
-            decimales = len(n_str.split('.')[1])
-            if decimales > 2:
-                raise EnterpriseManagementException("Invalid budget amount")
-
-        if f_bdgt < 50000 or f_bdgt > 1000000:
-            raise EnterpriseManagementException("Invalid budget amount")
-
+        self.validate_project_budget(budget)
 
         new_project = EnterpriseProject(company_cif=company_cif,
                                         project_acronym=project_acronym,
