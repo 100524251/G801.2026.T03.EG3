@@ -1,11 +1,59 @@
 """MODULE: enterprise_project. Contains the EnterpriseProject class"""
 import hashlib
 import json
+import re
 from datetime import datetime, timezone
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class EnterpriseProject:
     """Class representing a project"""
     #pylint: disable=too-many-arguments, too-many-positional-arguments
+
+    @staticmethod
+    def validate_cif(company_cif: str):
+        """Validates a CIF number."""
+        if not isinstance(company_cif, str):
+            raise EnterpriseManagementException("CIF code must be a string")
+        cif_pattern = re.compile(r"^[ABCDEFGHJKNPQRSUVW]\d{7}[0-9A-J]$")
+        if not cif_pattern.fullmatch(company_cif):
+            raise EnterpriseManagementException("Invalid CIF format")
+
+        organization_type = company_cif[0]
+        cif_digits = company_cif[1:8]
+        control_character = company_cif[8]
+
+        even_position_sum = 0
+        odd_position_sum = 0
+
+        for index in range(len(cif_digits)):
+            if index % 2 == 0:
+                doubled_value = int(cif_digits[index]) * 2
+                if doubled_value > 9:
+                    even_position_sum = even_position_sum + (doubled_value // 10) + (doubled_value % 10)
+                else:
+                    even_position_sum = even_position_sum + doubled_value
+            else:
+                odd_position_sum = odd_position_sum + int(cif_digits[index])
+
+        total_sum = even_position_sum + odd_position_sum
+        remainder = total_sum % 10
+        control_digit = 10 - remainder
+
+        if control_digit == 10:
+            control_digit = 0
+
+        control_letters = "JABCDEFGHI"
+
+        if organization_type in ('A', 'B', 'E', 'H'):
+            if str(control_digit) != control_character:
+                raise EnterpriseManagementException("Invalid CIF character control number")
+        elif organization_type in ('P', 'Q', 'S', 'K'):
+            if control_letters[control_digit] != control_character:
+                raise EnterpriseManagementException("Invalid CIF character control letter")
+        else:
+            raise EnterpriseManagementException("CIF type not supported")
+        return True
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,

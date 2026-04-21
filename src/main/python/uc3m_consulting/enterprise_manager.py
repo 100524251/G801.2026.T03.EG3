@@ -155,7 +155,7 @@ class EnterpriseManager:
                          date: str,
                          budget: str):
         """registers a new project"""
-        self.validate_cif(company_cif)
+        EnterpriseProject.validate_cif(company_cif)
 
         self.validate_project_acronym(project_acronym)
 
