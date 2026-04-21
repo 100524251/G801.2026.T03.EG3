@@ -73,16 +73,16 @@ class EnterpriseManager:
         except ValueError as ex:
             raise EnterpriseManagementException("Invalid date format") from ex
 
-    def validate_starting_date(self, t_d):
+    def validate_starting_date(self, starting_date):
         """validates the  date format  using regex"""
-        my_date = self.validate_date_format(t_d)
+        my_date = self.validate_date_format(starting_date)
 
         if my_date < datetime.now(timezone.utc).date():
             raise EnterpriseManagementException("Project's date must be today or later.")
 
         if my_date.year < 2025 or my_date.year > 2050:
             raise EnterpriseManagementException("Invalid date format")
-        return t_d
+        return starting_date
 
     def validate_project_acronym(self, project_acronym: str):
         """validates the project acronym format"""
@@ -252,13 +252,13 @@ class EnterpriseManager:
             raise EnterpriseManagementException("No documents found")
         # prepare json text
         now_str = datetime.now(timezone.utc).timestamp()
-        s = {"Querydate":  date_str,
-             "ReportDate": now_str,
-             "Numfiles": documents_found
-             }
+        report = {"Querydate":  date_str,
+                  "ReportDate": now_str,
+                  "Numfiles": documents_found
+                  }
 
         reports_list = self.read_numdocs_store()
-        reports_list.append(s)
+        reports_list.append(report)
         try:
             with open(TEST_NUMDOCS_STORE_FILE, "w", encoding="utf-8", newline="") as file:
                 json.dump(reports_list, file, indent=2)
