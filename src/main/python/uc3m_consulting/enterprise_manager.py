@@ -159,7 +159,7 @@ class EnterpriseManager:
 
         EnterpriseProject.validate_project_acronym(project_acronym)
 
-        self.validate_project_description(project_description)
+        EnterpriseProject.validate_project_description(project_description)
 
         self.validate_department(department)
 

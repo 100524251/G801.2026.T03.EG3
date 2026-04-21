@@ -88,6 +88,15 @@ class EnterpriseProject:
             raise EnterpriseManagementException("Invalid acronym")
         return project_acronym
 
+    @staticmethod
+    def validate_project_description(project_description: str):
+        """validates the project description format"""
+        description_pattern = re.compile(r"^.{10,30}$")
+        result = description_pattern.fullmatch(project_description)
+        if not result:
+            raise EnterpriseManagementException("Invalid description format")
+        return project_description
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,
