@@ -54,6 +54,19 @@ class EnterpriseProject:
             raise EnterpriseManagementException("CIF type not supported")
         return True
 
+    @staticmethod
+    def validate_date_format(date_text: str):
+        """validates the date format and returns the parsed date"""
+        date_pattern = re.compile(r"^(([0-2]\d|3[0-1])\/(0\d|1[0-2])\/\d\d\d\d)$")
+        result = date_pattern.fullmatch(date_text)
+        if not result:
+            raise EnterpriseManagementException("Invalid date format")
+
+        try:
+            return datetime.strptime(date_text, "%d/%m/%Y").date()
+        except ValueError as ex:
+            raise EnterpriseManagementException("Invalid date format") from ex
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,

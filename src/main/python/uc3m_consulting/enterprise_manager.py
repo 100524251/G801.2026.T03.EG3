@@ -75,7 +75,7 @@ class EnterpriseManager:
 
     def validate_starting_date(self, starting_date):
         """validates the  date format  using regex"""
-        my_date = self.validate_date_format(starting_date)
+        my_date = EnterpriseProject.validate_date_format(starting_date)
 
         if my_date < datetime.now(timezone.utc).date():
             raise EnterpriseManagementException("Project's date must be today or later.")
@@ -219,7 +219,7 @@ class EnterpriseManager:
             EnterpriseManagementException: On invalid date, file IO errors,
                 missing data, or cryptographic integrity failure.
         """
-        self.validate_date_format(date_str)
+        EnterpriseProject.validate_date_format(date_str)
 
         # open documents
         documents_list = self.read_documents_store()
