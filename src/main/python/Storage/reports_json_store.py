@@ -4,6 +4,8 @@ from src.main.python.uc3m_consulting.enterprise_manager_config import TEST_NUMDO
 
 
 class ReportsJsonStore(JsonStore):
+    """Almacén especializado para reportes con patrón Singleton"""
+    _instance = None  # ← Instancia única de ReportsJsonStore
 
     def __init__(self):
         super().__init__()
