@@ -97,6 +97,15 @@ class EnterpriseProject:
             raise EnterpriseManagementException("Invalid description format")
         return project_description
 
+    @staticmethod
+    def validate_department(department: str):
+        """validates the project department"""
+        department_pattern = re.compile(r"(HR|FINANCE|LEGAL|LOGISTICS)")
+        result = department_pattern.fullmatch(department)
+        if not result:
+            raise EnterpriseManagementException("Invalid department")
+        return department
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,

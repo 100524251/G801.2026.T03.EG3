@@ -161,7 +161,7 @@ class EnterpriseManager:
 
         EnterpriseProject.validate_project_description(project_description)
 
-        self.validate_department(department)
+        EnterpriseProject.validate_department(department)
 
         EnterpriseProject.validate_starting_date(date)
 
