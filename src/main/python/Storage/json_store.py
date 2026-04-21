@@ -21,7 +21,7 @@ class JsonStore:
         for candidate in self._data_list:
             if item == candidate:
                 return item
-            return None
+        return None
 
     def add_item(self, item: str):
         self._data_list.append(item)
