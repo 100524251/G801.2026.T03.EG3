@@ -184,6 +184,13 @@ class EnterpriseManager:
         self.write_projects_store(projects_list)
         return new_project.project_id
 
+    def read_documents_store(self):
+        """reads the documents store file"""
+        try:
+            with open(TEST_DOCUMENTS_STORE_FILE, "r", encoding="utf-8", newline="") as file:
+                return json.load(file)
+        except FileNotFoundError as ex:
+            raise EnterpriseManagementException("Wrong file  or file path") from ex
 
     def find_docs(self, date_str):
         """
@@ -205,12 +212,7 @@ class EnterpriseManager:
         self.validate_date_format(date_str)
 
         # open documents
-        try:
-            with open(TEST_DOCUMENTS_STORE_FILE, "r", encoding="utf-8", newline="") as file:
-                documents_list = json.load(file)
-        except FileNotFoundError as ex:
-            raise EnterpriseManagementException("Wrong file  or file path") from ex
-
+        documents_list = self.read_documents_store()
 
         documents_found = 0
 
