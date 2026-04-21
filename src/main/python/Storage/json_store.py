@@ -1,11 +1,25 @@
 import json
+import threading
 
 from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class JsonStore:
+    """Clase base para almacenamiento en JSON con patrón Singleton"""
     _file_name = ""
     _data_list = []
+    _instance = None
+    _lock = threading.Lock()
+    
+    def __new__(cls, *args, **kwargs):
+        """Implementa el patrón Singleton con thread-safety (double-check locking)"""
+        if cls._instance is None:
+            with cls._lock:
+                if cls._instance is None:
+                    cls._instance = super().__new__(cls)
+        return cls._instance
+    
     def __init__(self):
+        """Inicializa el almacén (se ejecuta solo cuando se crea la instancia)"""
         pass
 
     def load_store(self ):
