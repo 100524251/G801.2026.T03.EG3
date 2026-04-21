@@ -4,6 +4,8 @@ from src.main.python.uc3m_consulting.enterprise_manager_config import TEST_DOCUM
 
 
 class DocumentJsonStore(JsonStore):
+    """Almacén especializado para documentos con patrón Singleton"""
+    _instance = None  # ← Instancia única de DocumentJsonStore
 
     def __init__(self):
         super().__init__()
