@@ -79,6 +79,15 @@ class EnterpriseProject:
             raise EnterpriseManagementException("Invalid date format")
         return starting_date
 
+    @staticmethod
+    def validate_project_acronym(project_acronym: str):
+        """validates the project acronym format"""
+        acronym_pattern = re.compile(r"^[a-zA-Z0-9]{5,10}")
+        result = acronym_pattern.fullmatch(project_acronym)
+        if not result:
+            raise EnterpriseManagementException("Invalid acronym")
+        return project_acronym
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,

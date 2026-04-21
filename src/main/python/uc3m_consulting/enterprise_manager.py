@@ -157,7 +157,7 @@ class EnterpriseManager:
         """registers a new project"""
         EnterpriseProject.validate_cif(company_cif)
 
-        self.validate_project_acronym(project_acronym)
+        EnterpriseProject.validate_project_acronym(project_acronym)
 
         self.validate_project_description(project_description)
 
