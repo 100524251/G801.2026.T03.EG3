@@ -163,7 +163,7 @@ class EnterpriseManager:
 
         self.validate_department(department)
 
-        self.validate_starting_date(date)
+        EnterpriseProject.validate_starting_date(date)
 
         self.validate_project_budget(budget)
 

@@ -67,6 +67,18 @@ class EnterpriseProject:
         except ValueError as ex:
             raise EnterpriseManagementException("Invalid date format") from ex
 
+    @staticmethod
+    def validate_starting_date(starting_date):
+        """validates the date format using regex"""
+        my_date = EnterpriseProject.validate_date_format(starting_date)
+
+        if my_date < datetime.now(timezone.utc).date():
+            raise EnterpriseManagementException("Project's date must be today or later.")
+
+        if my_date.year < 2025 or my_date.year > 2050:
+            raise EnterpriseManagementException("Invalid date format")
+        return starting_date
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,
