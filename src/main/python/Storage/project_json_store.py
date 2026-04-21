@@ -11,5 +11,5 @@ class ProjectJsonStore(JsonStore):
         self.load_store()
     def add_item(self, item):
         if self.find_item(item) is not None:
-            raise EnterpriseManagementException("Duplicated project in projects list")
+            raise EnterpriseManagementException("Proyecto duplicado en la lista de proyectos")
         super().add_item(item)

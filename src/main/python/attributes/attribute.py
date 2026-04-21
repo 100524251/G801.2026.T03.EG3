@@ -1,28 +1,28 @@
-"""Module: attribute. Contains the base Attribute class"""
+"""Módulo: attribute. Contiene la clase base Attribute"""
 from abc import ABC, abstractmethod
 
 
 class Attribute(ABC):
-    """Abstract base class for all business attributes with validation"""
+    """Clase base abstracta para todos los atributos de negocio con validación"""
 
     def __init__(self, value):
-        """Initialize attribute with value and validate it"""
+        """Inicializa el atributo con un valor y lo valida"""
         self._value = value
         self.validate()
 
     @abstractmethod
     def validate(self):
-        """Validate the attribute value. Must be implemented by subclasses"""
+        """Valida el valor del atributo. Debe ser implementado por las subclases"""
 
     @abstractmethod
     def to_json(self):
-        """Convert attribute to JSON representation. Must be implemented by subclasses"""
+        """Convierte el atributo a representación JSON. Debe ser implementado por las subclases"""
 
     def __str__(self):
-        """String representation of the attribute"""
+        """Representación en cadena del atributo"""
         return str(self._value)
 
     @property
     def value(self):
-        """Get the attribute value"""
+        """Obtiene el valor del atributo"""
         return self._value

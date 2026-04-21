@@ -11,7 +11,7 @@ class ReportsJsonStore(JsonStore):
         self.load_store()
 
     def find_by_query_date(self, query_date):
-        """Find all reports matching the given query date"""
+        """Encuentra todos los reportes que coinciden con la fecha de consulta dada"""
         matching_reports = []
         for report in self._data_list:
             if "Querydate" in report and report["Querydate"] == query_date:
@@ -19,6 +19,6 @@ class ReportsJsonStore(JsonStore):
         return matching_reports
 
     def add_item(self, item):
-        """Add a new report to the store"""
+        """Añade un nuevo reporte al almacén"""
         super().add_item(item)
         self.save_store()

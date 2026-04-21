@@ -11,7 +11,7 @@ class DocumentJsonStore(JsonStore):
         self.load_store()
 
     def find_by_date(self, date_str):
-        """Find all documents matching the given date"""
+        """Encuentra todos los documentos que coinciden con la fecha dada"""
         matching_documents = []
         for document in self._data_list:
             if "register_date" in document:
@@ -22,6 +22,6 @@ class DocumentJsonStore(JsonStore):
         return matching_documents
 
     def add_item(self, item):
-        """Add a new document to the store"""
+        """Añade un nuevo documento al almacén"""
         super().add_item(item)
         self.save_store()
