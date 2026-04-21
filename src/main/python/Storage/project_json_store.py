@@ -4,11 +4,14 @@ from src.main.python.uc3m_consulting.enterprise_manager_config import PROJECTS_S
 
 
 class ProjectJsonStore(JsonStore):
+    """Almacén especializado para proyectos con patrón Singleton"""
+    _instance = None  # ← Instancia única de ProjectJsonStore
 
     def __init__(self):
         super().__init__()
         self._file_name = PROJECTS_STORE_FILE
         self.load_store()
+    
     def add_item(self, item):
         if self.find_item(item) is not None:
             raise EnterpriseManagementException("Proyecto duplicado en la lista de proyectos")
