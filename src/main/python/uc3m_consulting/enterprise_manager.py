@@ -165,7 +165,7 @@ class EnterpriseManager:
 
         EnterpriseProject.validate_starting_date(date)
 
-        self.validate_project_budget(budget)
+        EnterpriseProject.validate_project_budget(budget)
 
         new_project = EnterpriseProject(company_cif=company_cif,
                                         project_acronym=project_acronym,

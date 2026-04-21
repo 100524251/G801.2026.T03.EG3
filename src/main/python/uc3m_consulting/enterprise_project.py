@@ -106,6 +106,25 @@ class EnterpriseProject:
             raise EnterpriseManagementException("Invalid department")
         return department
 
+    @staticmethod
+    def validate_project_budget(budget):
+        """validates the project budget"""
+        try:
+            float_budget = float(budget)
+        except ValueError as exc:
+            raise EnterpriseManagementException("Invalid budget amount") from exc
+
+        budget_as_string = str(float_budget)
+        if '.' in budget_as_string:
+            decimal_digits = len(budget_as_string.split('.')[1])
+            if decimal_digits > 2:
+                raise EnterpriseManagementException("Invalid budget amount")
+
+        if float_budget < 50000 or float_budget > 1000000:
+            raise EnterpriseManagementException("Invalid budget amount")
+
+        return budget
+
     def __init__(self,
                  company_cif: str,
                  project_acronym: str,
