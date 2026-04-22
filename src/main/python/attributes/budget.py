@@ -1,7 +1,6 @@
 """Módulo: budget. Contiene la clase Budget para validación de presupuesto"""
-from src.main.python.attributes.attribute import Attribute
-from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-
+from attributes.attribute import Attribute
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class Budget(Attribute):
     """Clase para validar y almacenar un presupuesto de proyecto"""

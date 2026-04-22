@@ -1,8 +1,7 @@
 """Módulo: project_acronym. Contiene la clase ProjectAcronym para validación de acrónimo"""
 import re
-from src.main.python.attributes.attribute import Attribute
-from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-
+from attributes.attribute import Attribute
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class ProjectAcronym(Attribute):
     """Clase para validar y almacenar un acrónimo de proyecto"""

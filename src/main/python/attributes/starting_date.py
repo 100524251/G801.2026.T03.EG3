@@ -1,9 +1,8 @@
 """Módulo: starting_date. Contiene la clase StartingDate para validación de fecha de inicio"""
 import re
 from datetime import datetime, timezone
-from src.main.python.attributes.attribute import Attribute
-from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-
+from attributes.attribute import Attribute
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class StartingDate(Attribute):
     """Clase para validar y almacenar una fecha de inicio de proyecto"""

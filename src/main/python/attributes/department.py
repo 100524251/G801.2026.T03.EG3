@@ -1,7 +1,6 @@
 """Módulo: department. Contiene la clase Department para validación de departamento"""
-from src.main.python.attributes.attribute import Attribute
-from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-
+from attributes.attribute import Attribute
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class Department(Attribute):
     """Clase para validar y almacenar un departamento de proyecto"""

@@ -1,8 +1,7 @@
 """Módulo: cif. Contiene la clase CIF para validación de CIF"""
 import re
-from src.main.python.attributes.attribute import Attribute
-from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-
+from attributes.attribute import Attribute
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class CIF(Attribute):
     """Clase para validar y almacenar un número de CIF"""
