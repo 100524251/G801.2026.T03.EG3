@@ -9,6 +9,7 @@ from uc3m_consulting.enterprise_manager_config import (TEST_DOCUMENTS_STORE_FILE
                                                        TEST_NUMDOCS_STORE_FILE)
 from uc3m_consulting.project_document import ProjectDocument
 from Storage.project_json_store import ProjectJsonStore
+from Storage.document_json_store import DocumentJsonStore
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
@@ -82,7 +83,8 @@ class EnterpriseManager:
         EnterpriseProject.validate_date_format(date_str)
 
         # open documents
-        documents_list = self.read_documents_store()
+        doc_store = DocumentJsonStore()
+        documents_list = doc_store._data_list
 
         documents_found = 0
 
