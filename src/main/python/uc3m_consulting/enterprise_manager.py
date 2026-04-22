@@ -10,6 +10,7 @@ from uc3m_consulting.enterprise_manager_config import (PROJECTS_STORE_FILE,
                                                        TEST_DOCUMENTS_STORE_FILE,
                                                        TEST_NUMDOCS_STORE_FILE)
 from uc3m_consulting.project_document import ProjectDocument
+from Storage.project_json_store import ProjectJsonStore
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
@@ -174,14 +175,9 @@ class EnterpriseManager:
                                         starting_date=date,
                                         project_budget=budget)
 
-        projects_list = self.read_projects_store()
-        for stored_project in projects_list:
-            if stored_project == new_project.to_json():
-                raise EnterpriseManagementException("Duplicated project in projects list")
-
-        projects_list.append(new_project.to_json())
-
-        self.write_projects_store(projects_list)
+        project_store = ProjectJsonStore()
+        project_store.add_item(new_project.to_json())
+        project_store.save_store()
         return new_project.project_id
 
     def read_documents_store(self):
