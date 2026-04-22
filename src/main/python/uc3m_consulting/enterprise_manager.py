@@ -1,12 +1,8 @@
 """Module """
-import json
-
 from datetime import datetime, timezone
 from freezegun import freeze_time
 from uc3m_consulting.enterprise_project import EnterpriseProject
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-from uc3m_consulting.enterprise_manager_config import (TEST_DOCUMENTS_STORE_FILE,
-                                                       TEST_NUMDOCS_STORE_FILE)
 from uc3m_consulting.project_document import ProjectDocument
 from Storage.project_json_store import ProjectJsonStore
 from Storage.document_json_store import DocumentJsonStore
@@ -37,32 +33,6 @@ class EnterpriseManager:
         project_store.add_item(new_project.to_json())
         project_store.save_store()
         return new_project.project_id
-
-    def read_documents_store(self):
-        """reads the documents store file"""
-        try:
-            with open(TEST_DOCUMENTS_STORE_FILE, "r", encoding="utf-8", newline="") as file:
-                return json.load(file)
-        except FileNotFoundError as ex:
-            raise EnterpriseManagementException("Wrong file  or file path") from ex
-
-    def read_numdocs_store(self):
-        """reads the numdocs store file"""
-        try:
-            with open(TEST_NUMDOCS_STORE_FILE, "r", encoding="utf-8", newline="") as file:
-                return json.load(file)
-        except FileNotFoundError:
-            return []
-        except json.JSONDecodeError as ex:
-            raise EnterpriseManagementException("JSON Decode Error - Wrong JSON Format") from ex
-
-    def write_numdocs_store(self, reports_list):
-        """writes the numdocs store file"""
-        try:
-            with open(TEST_NUMDOCS_STORE_FILE, "w", encoding="utf-8", newline="") as file:
-                json.dump(reports_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise EnterpriseManagementException("Wrong file  or file path") from ex
 
     def find_docs(self, date_str):
         """
