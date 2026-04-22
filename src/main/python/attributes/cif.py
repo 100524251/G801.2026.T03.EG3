@@ -3,18 +3,19 @@ import re
 from attributes.attribute import Attribute
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
+
 class CIF(Attribute):
     """Clase para validar y almacenar un número de CIF"""
 
     def validate(self):
         """Valida el formato y el algoritmo de control del CIF"""
         if not isinstance(self._value, str):
-            raise EnterpriseManagementException("El código CIF debe ser una cadena de texto")
-        
+            raise EnterpriseManagementException("CIF code must be a string")
+
         # Validar formato básico del CIF
         cif_pattern = re.compile(r"^[ABCDEFGHJKNPQRSUVW]\d{7}[0-9A-J]$")
         if not cif_pattern.fullmatch(self._value):
-            raise EnterpriseManagementException("Formato de CIF inválido")
+            raise EnterpriseManagementException("Invalid CIF format")
 
         # Extraer componentes del CIF
         organization_type = self._value[0]
@@ -49,13 +50,13 @@ class CIF(Attribute):
         if organization_type in ('A', 'B', 'E', 'H'):
             # Estos tipos usan dígito de control
             if str(digito_control) != control_character:
-                raise EnterpriseManagementException("Número de control de carácter CIF inválido")
+                raise EnterpriseManagementException("Invalid CIF character control number")
         elif organization_type in ('P', 'Q', 'S', 'K'):
             # Estos tipos usan letra de control
             if letras_control[digito_control] != control_character:
-                raise EnterpriseManagementException("Letra de control de carácter CIF inválida")
+                raise EnterpriseManagementException("Invalid CIF character control letter")
         else:
-            raise EnterpriseManagementException("Tipo de CIF no soportado")
+            raise EnterpriseManagementException("CIF type not supported")
 
     def to_json(self):
         """Convierte el CIF a su representación JSON"""
