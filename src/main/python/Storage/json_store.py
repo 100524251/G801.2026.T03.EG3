@@ -1,8 +1,7 @@
 import json
 import threading
 
-from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 class JsonStore:
     """Clase base para almacenamiento en JSON con patrón Singleton"""
     _file_name = ""
