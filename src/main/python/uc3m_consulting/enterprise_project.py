@@ -4,6 +4,12 @@ import json
 import re
 from datetime import datetime, timezone
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
+from attributes.cif import CIF
+from attributes.project_acronym import ProjectAcronym
+from attributes.project_description import ProjectDescription
+from attributes.department import Department
+from attributes.starting_date import StartingDate
+from attributes.budget import Budget
 
 class EnterpriseProject:
     """Class representing a project"""
@@ -132,12 +138,12 @@ class EnterpriseProject:
                  department: str,
                  starting_date: str,
                  project_budget: float):
-        self.__company_cif = company_cif
-        self.__project_description = project_description
-        self.__project_achronym = project_acronym
-        self.__department = department
-        self.__starting_date = starting_date
-        self.__project_budget = project_budget
+        self.__company_cif = CIF(company_cif).value
+        self.__project_description = ProjectDescription(project_description).value
+        self.__project_achronym = ProjectAcronym(project_acronym).value
+        self.__department = Department(department).value
+        self.__starting_date = StartingDate(starting_date).value
+        self.__project_budget = Budget(project_budget).value
         justnow = datetime.now(timezone.utc)
         self.__time_stamp = datetime.timestamp(justnow)
 
