@@ -10,6 +10,7 @@ from uc3m_consulting.enterprise_manager_config import (TEST_DOCUMENTS_STORE_FILE
 from uc3m_consulting.project_document import ProjectDocument
 from Storage.project_json_store import ProjectJsonStore
 from Storage.document_json_store import DocumentJsonStore
+from Storage.reports_json_store import ReportsJsonStore
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
@@ -119,8 +120,7 @@ class EnterpriseManager:
                   "Numfiles": documents_found
                   }
 
-        reports_list = self.read_numdocs_store()
-        reports_list.append(report)
-        self.write_numdocs_store(reports_list)
+        reports_store = ReportsJsonStore()
+        reports_store.add_item(report)
 
         return documents_found
