@@ -1,12 +1,8 @@
 """Module """
-from datetime import datetime, timezone
-from freezegun import freeze_time
 from uc3m_consulting.enterprise_project import EnterpriseProject
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 from uc3m_consulting.project_document import ProjectDocument
 from Storage.project_json_store import ProjectJsonStore
-from Storage.document_json_store import DocumentJsonStore
-from Storage.reports_json_store import ReportsJsonStore
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
@@ -38,9 +34,6 @@ class EnterpriseManager:
         """
         Generates a JSON report counting valid documents for a specific date.
 
-        Checks cryptographic hashes and timestamps to ensure historical data integrity.
-        Saves the output to 'resultado.json'.
-
         Args:
             date_str (str): date to query.
 
@@ -48,49 +41,8 @@ class EnterpriseManager:
             number of documents found if report is successfully generated and saved.
 
         Raises:
-            EnterpriseManagementException: On invalid date, file IO errors,
-                missing data, or cryptographic integrity failure.
+            EnterpriseManagementException: On invalid date, integrity failure, or no documents found.
         """
         EnterpriseProject.validate_date_format(date_str)
-
-        # open documents
-        doc_store = DocumentJsonStore()
-        documents_list = doc_store._data_list
-
-        documents_found = 0
-
-        # loop to find
-        for stored_document in documents_list:
-            register_timestamp = stored_document["register_date"]
-
-            # string conversion for easy match
-            document_date = datetime.fromtimestamp(register_timestamp).strftime("%d/%m/%Y")
-
-            if document_date == date_str:
-                document_datetime = datetime.fromtimestamp(register_timestamp, tz=timezone.utc)
-                with freeze_time(document_datetime):
-                    # check the project id (thanks to freezetime)
-                    # if project_id are different then the data has been
-                    #manipulated
-                    project_document = ProjectDocument(
-                        stored_document["project_id"],
-                        stored_document["file_name"]
-                    )
-                    if project_document.document_signature == stored_document["document_signature"]:
-                        documents_found = documents_found + 1
-                    else:
-                        raise EnterpriseManagementException("Inconsistent document signature")
-
-        if documents_found == 0:
-            raise EnterpriseManagementException("No documents found")
-        # prepare json text
-        now_str = datetime.now(timezone.utc).timestamp()
-        report = {"Querydate":  date_str,
-                  "ReportDate": now_str,
-                  "Numfiles": documents_found
-                  }
-
-        reports_store = ReportsJsonStore()
-        reports_store.add_item(report)
-
+        documents_found = ProjectDocument.calculate_num_docs(date_str)
         return documents_found

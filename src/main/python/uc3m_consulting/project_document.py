@@ -1,6 +1,10 @@
 """Contains the class OrderShipping"""
 from datetime import datetime, timezone
 import hashlib
+from freezegun import freeze_time
+from Storage.document_json_store import DocumentJsonStore
+from Storage.reports_json_store import ReportsJsonStore
+from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class ProjectDocument():
     """Class representing the information required for shipping of an order"""
@@ -58,3 +62,58 @@ class ProjectDocument():
     def document_signature(self):
         """Returns the sha256 signature of the date"""
         return hashlib.sha256(self.__signature_string().encode()).hexdigest()
+
+    @classmethod
+    def calculate_num_docs(cls, date_str: str):
+        """
+        Calculates the number of valid documents for a specific date.
+        Verifies cryptographic integrity of documents and generates a report.
+
+        Args:
+            date_str (str): date to query in DD/MM/YYYY format.
+
+        Returns:
+            int: number of valid documents found.
+
+        Raises:
+            EnterpriseManagementException: On integrity failure or no documents found.
+        """
+        doc_store = DocumentJsonStore()
+        documents_list = doc_store._data_list
+        documents_found = 0
+
+        # loop to find and verify documents
+        for stored_document in documents_list:
+            register_timestamp = stored_document["register_date"]
+
+            # string conversion for easy match
+            document_date = datetime.fromtimestamp(register_timestamp).strftime("%d/%m/%Y")
+
+            if document_date == date_str:
+                document_datetime = datetime.fromtimestamp(register_timestamp, tz=timezone.utc)
+                with freeze_time(document_datetime):
+                    # check the project id (thanks to freezetime)
+                    # if project_id are different then the data has been manipulated
+                    project_document = cls(
+                        stored_document["project_id"],
+                        stored_document["file_name"]
+                    )
+                    if project_document.document_signature == stored_document["document_signature"]:
+                        documents_found = documents_found + 1
+                    else:
+                        raise EnterpriseManagementException("Inconsistent document signature")
+
+        if documents_found == 0:
+            raise EnterpriseManagementException("No documents found")
+
+        # prepare json report
+        now_str = datetime.now(timezone.utc).timestamp()
+        report = {"Querydate": date_str,
+                  "ReportDate": now_str,
+                  "Numfiles": documents_found}
+
+        reports_store = ReportsJsonStore()
+        reports_store.add_item(report)
+
+        return documents_found
+
