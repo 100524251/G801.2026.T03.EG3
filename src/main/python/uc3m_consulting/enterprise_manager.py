@@ -202,6 +202,14 @@ class EnterpriseManager:
         except json.JSONDecodeError as ex:
             raise EnterpriseManagementException("JSON Decode Error - Wrong JSON Format") from ex
 
+    def write_numdocs_store(self, reports_list):
+        """writes the numdocs store file"""
+        try:
+            with open(TEST_NUMDOCS_STORE_FILE, "w", encoding="utf-8", newline="") as file:
+                json.dump(reports_list, file, indent=2)
+        except FileNotFoundError as ex:
+            raise EnterpriseManagementException("Wrong file  or file path") from ex
+
     def find_docs(self, date_str):
         """
         Generates a JSON report counting valid documents for a specific date.
@@ -259,9 +267,6 @@ class EnterpriseManager:
 
         reports_list = self.read_numdocs_store()
         reports_list.append(report)
-        try:
-            with open(TEST_NUMDOCS_STORE_FILE, "w", encoding="utf-8", newline="") as file:
-                json.dump(reports_list, file, indent=2)
-        except FileNotFoundError as ex:
-            raise EnterpriseManagementException("Wrong file  or file path") from ex
+        self.write_numdocs_store(reports_list)
+
         return documents_found
