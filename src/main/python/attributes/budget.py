@@ -2,6 +2,7 @@
 from attributes.attribute import Attribute
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
+
 class Budget(Attribute):
     """Clase para validar y almacenar un presupuesto de proyecto"""
 
@@ -10,15 +11,13 @@ class Budget(Attribute):
         try:
             budget_value = float(self._value)
         except (ValueError, TypeError):
-            raise EnterpriseManagementException("El presupuesto debe ser un número válido")
-        
+            raise EnterpriseManagementException("Invalid budget amount")
         # Validar rango
         if budget_value < 50000 or budget_value > 1000000:
-            raise EnterpriseManagementException("Presupuesto inválido - debe estar entre 50000 y 1000000")
-        
+            raise EnterpriseManagementException("Invalid budget amount")
         # Validar máximo 2 decimales
         if not self._has_max_decimals(budget_value, 2):
-            raise EnterpriseManagementException("Presupuesto inválido - máximo 2 decimales permitidos")
+            raise EnterpriseManagementException("Invalid budget amount")
 
     @staticmethod
     def _has_max_decimals(value, max_decimals):
