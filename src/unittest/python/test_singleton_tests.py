@@ -14,7 +14,7 @@ class TestSingletonPattern(TestCase):
         """Test that EnterpriseManager returns the same instance (Singleton)"""
         manager1 = EnterpriseManager()
         manager2 = EnterpriseManager()
-        
+
         # Both instances should be the same object in memory
         self.assertIs(manager1, manager2)
         # They should have the same id
@@ -24,7 +24,7 @@ class TestSingletonPattern(TestCase):
         """Test that ProjectJsonStore returns the same instance (Singleton)"""
         store1 = ProjectJsonStore()
         store2 = ProjectJsonStore()
-        
+
         # Both instances should be the same object in memory
         self.assertIs(store1, store2)
         # They should have the same id
@@ -34,7 +34,7 @@ class TestSingletonPattern(TestCase):
         """Test that DocumentJsonStore returns the same instance (Singleton)"""
         store1 = DocumentJsonStore()
         store2 = DocumentJsonStore()
-        
+
         # Both instances should be the same object in memory
         self.assertIs(store1, store2)
         # They should have the same id
@@ -44,7 +44,7 @@ class TestSingletonPattern(TestCase):
         """Test that ReportsJsonStore returns the same instance (Singleton)"""
         store1 = ReportsJsonStore()
         store2 = ReportsJsonStore()
-        
+
         # Both instances should be the same object in memory
         self.assertIs(store1, store2)
         # They should have the same id
@@ -55,14 +55,14 @@ class TestSingletonPattern(TestCase):
         manager1 = EnterpriseManager()
         manager2 = EnterpriseManager()
         manager3 = EnterpriseManager()
-        
+
         self.assertIs(manager1, manager2)
         self.assertIs(manager2, manager3)
-        
+
         store1 = ProjectJsonStore()
         store2 = ProjectJsonStore()
         store3 = ProjectJsonStore()
-        
+
         self.assertIs(store1, store2)
         self.assertIs(store2, store3)
 
