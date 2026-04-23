@@ -6,10 +6,21 @@ class ProjectJsonStore(JsonStore):
     """Almacén especializado para proyectos con patrón Singleton"""
     _instance = None  # ← Instancia única de ProjectJsonStore
 
+    def __new__(cls):
+        """Sobrescribir __new__ para asegurar Singleton en esta clase"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.__initialized = False
+        return cls._instance
+
     def __init__(self):
+        if hasattr(self, '__initialized') and self.__initialized:
+            return
         super().__init__()
         self._file_name = PROJECTS_STORE_FILE
         self.load_store()
+        if hasattr(self, '__initialized'):
+            self.__initialized = True
     
     def add_item(self, item):
         if self.find_item(item) is not None:

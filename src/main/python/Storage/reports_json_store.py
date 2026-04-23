@@ -6,10 +6,21 @@ class ReportsJsonStore(JsonStore):
     """Almacén especializado para reportes con patrón Singleton"""
     _instance = None  # ← Instancia única de ReportsJsonStore
 
+    def __new__(cls):
+        """Sobrescribir __new__ para asegurar Singleton en esta clase"""
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.__initialized = False
+        return cls._instance
+
     def __init__(self):
+        if hasattr(self, '__initialized') and self.__initialized:
+            return
         super().__init__()
         self._file_name = TEST_NUMDOCS_STORE_FILE
         self.load_store()
+        if hasattr(self, '__initialized'):
+            self.__initialized = True
 
     def find_by_query_date(self, query_date):
         """Encuentra todos los reportes que coinciden con la fecha de consulta dada"""

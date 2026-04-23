@@ -6,8 +6,27 @@ from Storage.project_json_store import ProjectJsonStore
 
 class EnterpriseManager:
     """Class for providing the methods for managing the orders"""
+    
+    # 1. Clase interna privada
+    class __EnterpriseManager:
+        """Internal singleton class"""
+        def __init__(self):
+            pass
+
+    # 2. Atributo estático para guardar la instancia única
+    __instance = None
+
+    # 3. Sobreescribir __new__ para implementar el Singleton
+    def __new__(cls):
+        if cls.__instance is None:
+            cls.__instance = super().__new__(cls)
+            cls.__instance.__initialized = False
+        return cls.__instance
+
     def __init__(self):
-        pass
+        if self.__initialized:
+            return
+        self.__initialized = True
 
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
