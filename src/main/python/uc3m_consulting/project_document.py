@@ -68,15 +68,6 @@ class ProjectDocument():
         """
         Calculates the number of valid documents for a specific date.
         Verifies cryptographic integrity of documents and generates a report.
-
-        Args:
-            date_str (str): date to query in DD/MM/YYYY format.
-
-        Returns:
-            int: number of valid documents found.
-
-        Raises:
-            EnterpriseManagementException: On integrity failure or no documents found.
         """
         doc_store = DocumentJsonStore()
         documents_list = doc_store.get_data_list()
