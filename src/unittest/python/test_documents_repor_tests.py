@@ -93,6 +93,26 @@ class TestTransferRequestTest(TestCase):
             hash_new = ""
         self.assertEqual(hash_new, hash_original)
 
+    @freeze_time("2026/12/31 13:00:00")
+    def test_find_by_date(self):
+        """Test DocumentJsonStore.find_by_date method"""
+        from Storage.document_json_store import DocumentJsonStore
+        
+        doc_store = DocumentJsonStore()
+        
+        # Search for documents from 05/04/2026 (should find 2 documents)
+        matching_docs = doc_store.find_by_date("05/04/2026")
+        self.assertEqual(len(matching_docs), 2)
+        
+        # Verify that all returned documents have the correct date
+        for doc in matching_docs:
+            doc_date = datetime.fromtimestamp(doc["register_date"]).strftime("%d/%m/%Y")
+            self.assertEqual(doc_date, "05/04/2026")
+        
+        # Search for a date with no documents (should return empty list)
+        no_docs = doc_store.find_by_date("01/01/2025")
+        self.assertEqual(len(no_docs), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
