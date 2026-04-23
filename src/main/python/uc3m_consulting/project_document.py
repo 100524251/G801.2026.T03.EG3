@@ -2,8 +2,8 @@
 from datetime import datetime, timezone
 import hashlib
 from freezegun import freeze_time
-from Storage.document_json_store import DocumentJsonStore
-from Storage.reports_json_store import ReportsJsonStore
+from storage.document_json_store import DocumentJsonStore
+from storage.reports_json_store import ReportsJsonStore
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 class ProjectDocument():
@@ -79,7 +79,7 @@ class ProjectDocument():
             EnterpriseManagementException: On integrity failure or no documents found.
         """
         doc_store = DocumentJsonStore()
-        documents_list = doc_store._data_list
+        documents_list = doc_store.get_data_list()
         documents_found = 0
 
         # loop to find and verify documents
@@ -98,10 +98,12 @@ class ProjectDocument():
                         stored_document["project_id"],
                         stored_document["file_name"]
                     )
-                    if project_document.document_signature == stored_document["document_signature"]:
+                    if project_document.document_signature == \
+                            stored_document["document_signature"]:
                         documents_found = documents_found + 1
                     else:
-                        raise EnterpriseManagementException("Inconsistent document signature")
+                        msg = "Inconsistent document signature"
+                        raise EnterpriseManagementException(msg)
 
         if documents_found == 0:
             raise EnterpriseManagementException("No documents found")
@@ -116,4 +118,3 @@ class ProjectDocument():
         reports_store.add_item(report)
 
         return documents_found
-

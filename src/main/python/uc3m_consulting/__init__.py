@@ -12,3 +12,10 @@ from uc3m_consulting.enterprise_manager_config import (JSON_FILES_PATH,
                                                        BALANCES_STORE_FILE,
                                                        TEST_DOCUMENTS_STORE_FILE,
                                                        TEST_NUMDOCS_STORE_FILE)
+
+__all__ = [
+    "ProjectDocument",
+    "EnterpriseManager",
+    "EnterpriseManagementException",
+    "EnterpriseProject",
+]

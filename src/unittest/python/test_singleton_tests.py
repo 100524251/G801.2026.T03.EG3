@@ -2,9 +2,9 @@
 import unittest
 from unittest import TestCase
 from uc3m_consulting import EnterpriseManager
-from Storage.project_json_store import ProjectJsonStore
-from Storage.document_json_store import DocumentJsonStore
-from Storage.reports_json_store import ReportsJsonStore
+from storage.project_json_store import ProjectJsonStore
+from storage.document_json_store import DocumentJsonStore
+from storage.reports_json_store import ReportsJsonStore
 
 
 class TestSingletonPattern(TestCase):

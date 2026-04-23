@@ -10,8 +10,8 @@ class Budget(Attribute):
         """Valida que el presupuesto esté en el rango [50000, 1000000] con máximo 2 decimales"""
         try:
             budget_value = float(self._value)
-        except (ValueError, TypeError):
-            raise EnterpriseManagementException("Invalid budget amount")
+        except (ValueError, TypeError) as exc:
+            raise EnterpriseManagementException("Invalid budget amount") from exc
         # Validar rango
         if budget_value < 50000 or budget_value > 1000000:
             raise EnterpriseManagementException("Invalid budget amount")

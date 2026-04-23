@@ -1,32 +1,17 @@
-"""Module """
+"""Module: enterprise_manager. Provides methods for managing enterprise projects"""
 from uc3m_consulting.enterprise_project import EnterpriseProject
-from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 from uc3m_consulting.project_document import ProjectDocument
-from Storage.project_json_store import ProjectJsonStore
+from storage.project_json_store import ProjectJsonStore
+from storage.json_store import SingletonMixin
 
-class EnterpriseManager:
-    """Class for providing the methods for managing the orders"""
-    
-    # 1. Clase interna privada
-    class __EnterpriseManager:
-        """Internal singleton class"""
-        def __init__(self):
-            pass
 
-    # 2. Atributo estático para guardar la instancia única
-    __instance = None
-
-    # 3. Sobreescribir __new__ para implementar el Singleton
-    def __new__(cls):
-        if cls.__instance is None:
-            cls.__instance = super().__new__(cls)
-            cls.__instance.__initialized = False
-        return cls.__instance
+class EnterpriseManager(SingletonMixin):
+    """Class for providing the methods for managing the projects"""
 
     def __init__(self):
-        if self.__initialized:
+        if self.is_initialized():
             return
-        self.__initialized = True
+        self._mark_initialized()
 
     #pylint: disable=too-many-arguments, too-many-positional-arguments
     def register_project(self,
@@ -60,7 +45,7 @@ class EnterpriseManager:
             number of documents found if report is successfully generated and saved.
 
         Raises:
-            EnterpriseManagementException: On invalid date, integrity failure, or no documents found.
+            EnterpriseManagementException: On invalid date or integrity failure.
         """
         EnterpriseProject.validate_date_format(date_str)
         documents_found = ProjectDocument.calculate_num_docs(date_str)

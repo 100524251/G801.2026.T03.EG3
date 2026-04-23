@@ -1,4 +1,7 @@
-"""Módulo: project_description. Contiene la clase ProjectDescription para validación de descripción"""
+"""Módulo: project_description. Validación de descripción de proyectos.
+
+Contiene la clase ProjectDescription para validación de descripción
+"""
 import re
 from attributes.attribute import Attribute
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException

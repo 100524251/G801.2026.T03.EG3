@@ -1,54 +1,84 @@
+"""Module: json_store. Base class for JSON storage with Singleton pattern"""
 import json
 import threading
 
 from uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
-class JsonStore:
+
+
+class SingletonMixin:
+    """Mixin implementing Singleton pattern for any class"""
+    _instances = {}
+
+    def __new__(cls):
+        """Singleton implementation per class"""
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__new__(cls)
+            cls._instances[cls]._initialized = False
+        return cls._instances[cls]
+
+    def _mark_initialized(self):
+        """Mark this instance as initialized"""
+        self._initialized = True
+
+    def is_initialized(self):
+        """Check if instance is already initialized"""
+        return hasattr(self, '_initialized') and self._initialized
+
+
+class BaseSingletonStore(SingletonMixin):
+    """Base class implementing Singleton pattern for store classes"""
+    # pylint: disable=too-few-public-methods
+
+    def __init__(self):
+        """Initialize base singleton store"""
+
+
+class JsonStore(SingletonMixin):
     """Clase base para almacenamiento en JSON con patrón Singleton"""
     _file_name = ""
     _data_list = []
-    _instance = None
     _lock = threading.Lock()
-    
-    def __new__(cls, *args, **kwargs):
-        """Implementa el patrón Singleton con thread-safety (double-check locking)"""
-        if cls._instance is None:
-            with cls._lock:
-                if cls._instance is None:
-                    cls._instance = super().__new__(cls)
-        return cls._instance
-    
+
     def __init__(self):
         """Inicializa el almacén (se ejecuta solo cuando se crea la instancia)"""
-        pass
 
-    def load_store(self ):
+    def load_store(self):
+        """Carga el almacén desde el archivo JSON especificado en _file_name"""
         try:
             with open(self._file_name, "r", encoding="utf-8", newline="") as file:
                 self._data_list = json.load(file)
         except FileNotFoundError:
             self._data_list = []
         except json.JSONDecodeError as ex:
-            raise EnterpriseManagementException("Error de decodificación JSON - Formato JSON incorrecto") from ex
+            msg = "Error de decodificación JSON - Formato JSON incorrecto"
+            raise EnterpriseManagementException(msg) from ex
 
     def find_item(self, item: str):
+        """Busca un elemento en el almacén"""
         for candidate in self._data_list:
             if item == candidate:
                 return item
         return None
 
     def add_item(self, item: str):
+        """Añade un nuevo elemento al almacén"""
         self._data_list.append(item)
 
-
     def save_store(self):
+        """Guarda el almacén en el archivo JSON especificado en _file_name"""
         try:
             with open(self._file_name, "w", encoding="utf-8", newline="") as file:
                 json.dump(self._data_list, file, indent=2)
         except FileNotFoundError as ex:
-            raise EnterpriseManagementException("Archivo no encontrado o ruta incorrecta") from ex
+            msg = "Archivo no encontrado o ruta incorrecta"
+            raise EnterpriseManagementException(msg) from ex
         except json.JSONDecodeError as ex:
-            raise EnterpriseManagementException("Error de decodificación JSON - Formato JSON incorrecto") from ex
-
+            msg = "Error de decodificación JSON - Formato JSON incorrecto"
+            raise EnterpriseManagementException(msg) from ex
 
     def find_docs(self):
-        pass
+        """Método placeholder para búsqueda de documentos"""
+
+    def get_data_list(self):
+        """Retorna la lista de datos almacenados"""
+        return self._data_list
