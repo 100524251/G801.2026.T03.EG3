@@ -5,10 +5,10 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), 'src/main/python'))
 
 from src.main.python.attributes.cif import CIF
 from src.main.python.attributes.attribute import Attribute
-from src.main.python.Storage.json_store import JsonStore
-from src.main.python.Storage.project_json_store import ProjectJsonStore
-from src.main.python.Storage.document_json_store import DocumentJsonStore
-from src.main.python.Storage.reports_json_store import ReportsJsonStore
+from src.main.python.storage.json_store import JsonStore
+from src.main.python.storage.project_json_store import ProjectJsonStore
+from src.main.python.storage.document_json_store import DocumentJsonStore
+from src.main.python.storage.reports_json_store import ReportsJsonStore
 from src.main.python.uc3m_consulting.enterprise_management_exception import EnterpriseManagementException
 
 def test_imports():
