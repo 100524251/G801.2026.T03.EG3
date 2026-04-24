@@ -1,10 +1,16 @@
 """Tests for Singleton pattern implementation"""
 import unittest
 from unittest import TestCase
+
 from uc3m_consulting import EnterpriseManager
 from storage.project_json_store import ProjectJsonStore
 from storage.document_json_store import DocumentJsonStore
 from storage.reports_json_store import ReportsJsonStore
+
+
+class RegularClass:
+    """Auxiliary non-singleton class for contrast testing."""
+    pass
 
 
 class TestSingletonPattern(TestCase):
@@ -15,9 +21,7 @@ class TestSingletonPattern(TestCase):
         manager1 = EnterpriseManager()
         manager2 = EnterpriseManager()
 
-        # Both instances should be the same object in memory
         self.assertIs(manager1, manager2)
-        # They should have the same id
         self.assertEqual(id(manager1), id(manager2))
 
     def test_project_json_store_singleton(self):
@@ -25,9 +29,7 @@ class TestSingletonPattern(TestCase):
         store1 = ProjectJsonStore()
         store2 = ProjectJsonStore()
 
-        # Both instances should be the same object in memory
         self.assertIs(store1, store2)
-        # They should have the same id
         self.assertEqual(id(store1), id(store2))
 
     def test_document_json_store_singleton(self):
@@ -35,9 +37,7 @@ class TestSingletonPattern(TestCase):
         store1 = DocumentJsonStore()
         store2 = DocumentJsonStore()
 
-        # Both instances should be the same object in memory
         self.assertIs(store1, store2)
-        # They should have the same id
         self.assertEqual(id(store1), id(store2))
 
     def test_reports_json_store_singleton(self):
@@ -45,9 +45,7 @@ class TestSingletonPattern(TestCase):
         store1 = ReportsJsonStore()
         store2 = ReportsJsonStore()
 
-        # Both instances should be the same object in memory
         self.assertIs(store1, store2)
-        # They should have the same id
         self.assertEqual(id(store1), id(store2))
 
     def test_multiple_calls_return_same_instance(self):
@@ -65,6 +63,14 @@ class TestSingletonPattern(TestCase):
 
         self.assertIs(store1, store2)
         self.assertIs(store2, store3)
+
+    def test_non_singleton_class_returns_different_instances(self):
+        """Test that a regular class without Singleton returns different objects"""
+        instance1 = RegularClass()
+        instance2 = RegularClass()
+
+        self.assertIsNot(instance1, instance2)
+        self.assertNotEqual(id(instance1), id(instance2))
 
 
 if __name__ == '__main__':
