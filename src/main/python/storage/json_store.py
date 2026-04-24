@@ -25,14 +25,6 @@ class SingletonMixin:
         return hasattr(self, '_initialized') and self._initialized
 
 
-class BaseSingletonStore(SingletonMixin):
-    """Base class implementing Singleton pattern for store classes"""
-    # pylint: disable=too-few-public-methods
-
-    def __init__(self):
-        """Initialize base singleton store"""
-
-
 class JsonStore(SingletonMixin):
     """Clase base para almacenamiento en JSON con patrón Singleton"""
     _file_name = ""
@@ -75,9 +67,6 @@ class JsonStore(SingletonMixin):
         except json.JSONDecodeError as ex:
             msg = "Error de decodificación JSON - Formato JSON incorrecto"
             raise EnterpriseManagementException(msg) from ex
-
-    def find_docs(self):
-        """Método placeholder para búsqueda de documentos"""
 
     def get_data_list(self):
         """Retorna la lista de datos almacenados"""
