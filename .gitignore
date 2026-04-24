@@ -1,7 +1,41 @@
+# Virtual environments
+venv
 venv*
+.venv
 .venv*
-.idea
-.pybuilder
-target
+env/
+ENV/
+
+# IDEs / editors
+.idea/
+.vscode/
+*.iml
+
+# Python cache / compiled files
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+
+# Build / packaging
+.pybuilder/
+target/
+dist/
+build/
+*.egg-info/
+
+# Test / coverage / lint reports
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+nosetests.xml
+pytest.xml
+pylint-report.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
