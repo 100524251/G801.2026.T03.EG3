@@ -7,6 +7,7 @@ from unittest import TestCase
 from os import remove
 from datetime import datetime, timezone
 from freezegun import freeze_time
+from storage.document_json_store import DocumentJsonStore
 from uc3m_consulting import (TEST_NUMDOCS_STORE_FILE,
                         EnterpriseManager,
                         EnterpriseManagementException)
@@ -96,7 +97,6 @@ class TestTransferRequestTest(TestCase):
     @freeze_time("2026/12/31 13:00:00")
     def test_find_by_date(self):
         """Test DocumentJsonStore.find_by_date method"""
-        from storage.document_json_store import DocumentJsonStore
 
         doc_store = DocumentJsonStore()
 

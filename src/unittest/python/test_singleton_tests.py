@@ -7,10 +7,9 @@ from storage.project_json_store import ProjectJsonStore
 from storage.document_json_store import DocumentJsonStore
 from storage.reports_json_store import ReportsJsonStore
 
-
+# pylint: disable=too-few-public-methods
 class RegularClass:
     """Auxiliary non-singleton class for contrast testing."""
-    pass
 
 
 class TestSingletonPattern(TestCase):
