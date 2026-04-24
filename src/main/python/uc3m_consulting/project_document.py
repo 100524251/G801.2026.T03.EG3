@@ -70,31 +70,26 @@ class ProjectDocument():
         Verifies cryptographic integrity of documents and generates a report.
         """
         doc_store = DocumentJsonStore()
-        documents_list = doc_store.get_data_list()
+        documents_list = doc_store.find_by_date(date_str)
         documents_found = 0
 
-        # loop to find and verify documents
+        # loop to verify documents already filtered by date
         for stored_document in documents_list:
             register_timestamp = stored_document["register_date"]
-
-            # string conversion for easy match
-            document_date = datetime.fromtimestamp(register_timestamp).strftime("%d/%m/%Y")
-
-            if document_date == date_str:
-                document_datetime = datetime.fromtimestamp(register_timestamp, tz=timezone.utc)
-                with freeze_time(document_datetime):
-                    # check the project id (thanks to freezetime)
-                    # if project_id are different then the data has been manipulated
-                    project_document = cls(
-                        stored_document["project_id"],
-                        stored_document["file_name"]
-                    )
-                    if project_document.document_signature == \
-                            stored_document["document_signature"]:
-                        documents_found = documents_found + 1
-                    else:
-                        msg = "Inconsistent document signature"
-                        raise EnterpriseManagementException(msg)
+            document_datetime = datetime.fromtimestamp(register_timestamp, tz=timezone.utc)
+            with freeze_time(document_datetime):
+                # check the project id (thanks to freezetime)
+                # if project_id are different then the data has been manipulated
+                project_document = cls(
+                    stored_document["project_id"],
+                    stored_document["file_name"]
+                )
+                if project_document.document_signature == \
+                        stored_document["document_signature"]:
+                    documents_found = documents_found + 1
+                else:
+                    msg = "Inconsistent document signature"
+                    raise EnterpriseManagementException(msg)
 
         if documents_found == 0:
             raise EnterpriseManagementException("No documents found")
